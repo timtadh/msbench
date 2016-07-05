@@ -7,3 +7,6 @@
 [submodule "examples/src/golang.org/x/net"]
 	path = examples/src/golang.org/x/net
 	url = git@github.com:golang/net
+[submodule "examples/src/golang.org/x/tools"]
+	path = examples/src/golang.org/x/tools
+	url = git@github.com:golang/tools
