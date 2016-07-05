@@ -4,3 +4,6 @@
 [submodule "examples/src/github.com/timtadh/getopt"]
 	path = examples/src/github.com/timtadh/getopt
 	url = git@github.com:timtadh/getopt
+[submodule "examples/src/golang.org/x/net"]
+	path = examples/src/golang.org/x/net
+	url = git@github.com:golang/net
