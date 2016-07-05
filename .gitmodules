@@ -1,0 +1,6 @@
+[submodule "examples/src/golang.org/x/debug"]
+	path = examples/src/golang.org/x/debug
+	url = git@github.com:golang/debug
+[submodule "examples/src/github.com/timtadh/getopt"]
+	path = examples/src/github.com/timtadh/getopt
+	url = git@github.com:timtadh/getopt

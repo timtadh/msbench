@@ -1,0 +1,2 @@
+GOPATH=$(pwd)
+PATH=$(pwd)/bin:$PATH

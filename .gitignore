@@ -1,0 +1,15 @@
+*swp
+*swo
+pkg/
+bin/*
+data/
+*.pyc
+env/
+results/
+tmp*
+res*
+cover*
+slow*
+*.test
+test.*
+
