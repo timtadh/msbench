@@ -122,3 +122,17 @@ You can run them like so:
         -p,--cpu-profile=<path>           Path to write the cpu-profile
         -l,--loops=<int>                  Number of times to parse each input
 
+### Running a dataset through all versions
+
+    $ for version in $(ls html-ex-versions); do
+    >   /usr/bin/time -v ./html-ex-versions/$version -p /tmp/$version-page.pprof -l 500 page.html 2> /tmp/$version-page.time
+    > done
+
+### Running all datasets through all versions
+
+    $ for page in $(ls <path>/cc-sample); do
+    >   for version in $(ls html-ex-versions); do
+    >     /usr/bin/time -v ./html-ex-versions/$version -p /tmp/$version-$page.pprof -l 500 $page 2> /tmp/$version-$page.time
+    >   done
+    > done
+
