@@ -15,21 +15,35 @@ import (
 	"github.com/timtadh/getopt"
 )
 
+var UsageMsg = `
+Option Flags
+    -h,--help                         Show this message
+    -p,--cpu-profile=<path>           Path to write the cpu-profile
+    -l,--loops=<int>                  Number of times to parse each input
+`
+
+func Usage(code int) {
+	fmt.Printf("%s [-p <cpu-profile-path>] [-l <int>] [<input-path>]+\n", os.Args[0])
+	fmt.Println(UsageMsg)
+	os.Exit(code)
+}
 
 func Main(argv []string, f func(path string) error) {
 	args, optargs, err := getopt.GetOpt(
 		argv,
-		"p:l:",
-		[]string{"cpu-profile=", "loops="},
+		"hp:l:",
+		[]string{"help", "cpu-profile=", "loops="},
 	)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(-1)
+		Usage(-1)
 	}
 	cpuProfile := ""
 	loops := 1
 	for _, oa := range optargs {
 		switch oa.Opt() {
+		case "-h", "--help":
+			Usage(0)
 		case "-p", "--cpu-profile":
 			cpuProfile = oa.Arg()
 		case "-l", "--loops":
@@ -40,6 +54,10 @@ func Main(argv []string, f func(path string) error) {
 				os.Exit(-1)
 			}
 		}
+	}
+	if len(args) == 0 {
+		fmt.Println("Please supply at least one input")
+		Usage(-1)
 	}
 	cleanup := func() {}
 	if cpuProfile != "" {
