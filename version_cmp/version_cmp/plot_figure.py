@@ -33,10 +33,26 @@ def plot_box(name_list, result_list, f_oneway):
     plt.show()
 
 
+def plot_one(name_list, result_list, number):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    dic_return = ax.boxplot(x=result_list)
+
+    ax.set_title("sample number: " + number)
+
+    ax.set_xlabel("versions")
+    ax.set_ylabel("time: ms")
+
+    xtickname = plt.setp(ax, xticklabels=name_list)
+    plt.setp(xtickname, rotation=45)
+    plt.show()
+
+
 def plot(x_multi=[[1, 11, 21], [2, 12, 22], [3, 13, 23], [4, 14, 24], [5, 15, 25], [6, 16, 26]], label=['a', 'b', 'c', 'd', 'e']):
     plt.hist(x_multi, histtype='bar', label=label)
     plt.legend(prop={'size': 10})
     plt.show()
+    plt.set_xlabel()
 
 
 def std_points_in_outliers(dic_return, name_list):
