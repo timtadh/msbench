@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import calcu_util
 
 
-def plot_box(name_list, result_list, f_oneway):
+def plot_box(name_list, result_list, f_oneway, output_dir):
     name_list = [name[:10] for name in name_list]
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -26,14 +26,15 @@ def plot_box(name_list, result_list, f_oneway):
     # ax.set_xlabel(name)
     xtickname = plt.setp(ax, xticklabels=name_list)
     plt.setp(xtickname, rotation=45)
-    print "standard deviation of medians:", std_medians(dic_return, name_list)
-    print "standard deviation of numbers of points beyond whiskers (lower, upper):", std_points_in_outliers(dic_return, name_list)
-    print "standard deviation of quartiles (lower, upper):", std_quartiles(dic_return, name_list)
-    print "standard deviation of whiskers (lower, upper):", std_whiskers(dic_return, name_list)
+
+    content = ""
+    content += "standard deviation of medians:" + str(std_medians(dic_return, name_list)) + "\nstandard deviation of numbers of points beyond whiskers (lower, upper):" + str(std_points_in_outliers(dic_return, name_list)) + "\nstandard deviation of quartiles (lower, upper):" + str(std_quartiles(dic_return, name_list)) + "\nstandard deviation of whiskers (lower, upper):" + str(std_whiskers(dic_return, name_list))
+    calcu_util.write_file(output_dir+"/plot_analysis.txt", content)
+    print
     plt.show()
 
 
-def plot_one(name_list, result_list, number):
+def plot_one(name_list, result_list, number, output_dir):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     dic_return = ax.boxplot(x=result_list)
@@ -45,7 +46,10 @@ def plot_one(name_list, result_list, number):
 
     xtickname = plt.setp(ax, xticklabels=name_list)
     plt.setp(xtickname, rotation=45)
+    dir = output_dir+"/"+number+".png"
+    plt.savefig(dir)
     plt.show()
+    return dir
 
 
 def plot(x_multi=[[1, 11, 21], [2, 12, 22], [3, 13, 23], [4, 14, 24], [5, 15, 25], [6, 16, 26]], label=['a', 'b', 'c', 'd', 'e']):

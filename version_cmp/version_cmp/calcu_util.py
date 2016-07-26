@@ -58,11 +58,17 @@ def calculate_allfiles_mean_std(dir):
                     result_std_dic[name] = format_number(result_std * 1)
     return name_list, result_mean_list, result_std_list, result_mean_dic, result_std_dic
 
+
+def dynamic_report_bigdifference(dir, population):
+    for i in range(population):
+        name_list, result_list = get_onesample_allversions(dir, i)
+
+
 def get_onesample_allversions(dir, number):
     allfiles_name_list = pre_process(dir)
     name_list = []
     result_list = []
-    times_list=[]
+    times_list = []
     for name in allfiles_name_list:
         if name.__contains__(number):
             times_list.append(name)
@@ -76,6 +82,7 @@ def get_onesample_allversions(dir, number):
             name_list.append(name)
             result_list.append(format_number_list(convert_string_number(a)))
     return name_list, result_list
+
 
 def calculate_mean(a):
     if len(a) > 0:
@@ -131,13 +138,12 @@ def generate_dir(dir):
         os.mkdir(dir)
 
 
-def write_allfiles(name_list, result_mean_list, result_std_list):
-    dir = "/tmp/version_cmp/mean_std.txt"
-    generate_dir("/tmp/version_cmp")
+def write_allfiles(name_list, result_mean_list, result_std_list, output_dir):
+    dir = output_dir + "/mean_std.txt"
     f = open(dir, "a+")
     i = 1
     for i in range(len(name_list)):
-        f.write(name_list[i] + "\t" + str(result_mean_list[i]) + "\t" + str(result_std_list[i])+"\r")
+        f.write(name_list[i] + "\t" + str(result_mean_list[i]) + "\t" + str(result_std_list[i]) + "\r")
         i += 1
     f.close()
     return i, dir
@@ -145,7 +151,7 @@ def write_allfiles(name_list, result_mean_list, result_std_list):
 
 def write_file(dir="", content=""):
     if content != "":
-        f = open(dir, "a+")
+        f = open(dir, "w+")
         f.write(content)
         f.close()
 
