@@ -1,13 +1,3 @@
-"""
-Demo of the histogram (hist) function with multiple data sets.
-
-Plot histogram with multiple sample sets and demonstrate:
-
-    * Use of legend with multiple sample sets
-    * Stacked bars
-    * Step curve with a color fill
-    * Data sets of different sample sizes
-"""
 import matplotlib.pyplot as plt
 import calcu_util
 
@@ -28,7 +18,10 @@ def plot_box(name_list, result_list, f_oneway, output_dir):
     plt.setp(xtickname, rotation=45)
 
     content = ""
-    content += "standard deviation of medians:" + str(std_medians(dic_return, name_list)) + "\nstandard deviation of numbers of points beyond whiskers (lower, upper):" + str(std_points_in_outliers(dic_return, name_list)) + "\nstandard deviation of quartiles (lower, upper):" + str(std_quartiles(dic_return, name_list)) + "\nstandard deviation of whiskers (lower, upper):" + str(std_whiskers(dic_return, name_list))
+    content += "standard deviation of medians:" + str(std_medians(dic_return, name_list)) + \
+               "\nstandard deviation of numbers of points beyond whiskers (lower, upper):" + str(std_points_in_outliers(dic_return, name_list)) + \
+               "\nstandard deviation of quartiles (lower, upper):" + str(std_quartiles(dic_return, name_list)) + \
+               "\nstandard deviation of whiskers (lower, upper):" + str(std_whiskers(dic_return, name_list))
     calcu_util.write_file(output_dir+"/plot_analysis.txt", content)
     print
     plt.show()
