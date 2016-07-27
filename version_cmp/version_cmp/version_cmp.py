@@ -8,12 +8,12 @@ import anova_oneway
 import sys
 import os
 import tempfile
+import anova_oneway
 from optparse import OptionParser
 
 
 def main():
     usage = "%prog -o <output-path> [--plot-all|--plot-dataset=<dataset>|--stats] <datasets>"
-    # usage = "usage: %prog -c <samples_dir> or \n %prog -t <samples_dir> -n <int>"
     parser = OptionParser(usage)
     parser.add_option(
         '-o', "--output", dest="output", type="string", default=tempfile.gettempdir(),
@@ -30,6 +30,10 @@ def main():
     parser.add_option(
         '-s', "--stats", dest="stats", action="store_true", default=False,
         help="compute descriptive statistics: mean, stddev",
+    )
+    parser.add_option(
+        '-t', "--t-test", dest="t_test", type="string", action="append",
+        help="name the versions to tun the t-test"
     )
     (options, args) = parser.parse_args()
 
@@ -54,10 +58,17 @@ def main():
         stats(output_dir, datasets)
     elif options.plot_all:
         plot_all(output_dir, datasets)
-    elif options.plot_dataset is not None:
-        plot_dataset(output_dir, datasets, str(options.plot_dataset))
+    elif options.plot_dataset:
+        # plot particular versions
+        if options.t_test:
+            # calculate_t_test()
+            plot_dataset_versions(options.output, datasets, str(options.plot_dataset), options.t_test)
+        # plot all versions
+        else:
+            # calculate_t_test()
+            plot_dataset_allversions(output_dir, datasets, str(options.plot_dataset))
     else:
-        print >> sys.stderr, "you must supply one of: --stats, --plot-all, --plot-dataset"
+        print >> sys.stderr, "you must supply one of: --stats, --plot-all, --plot-dataset, [-n, -t]"
         parser.print_help()
         sys.exit(1)
 
@@ -73,9 +84,24 @@ def plot_all(output_dir, dataset_dir):
     plot(name_list, result_mean_list, get_f_oneway(result_mean_list), output_dir)
 
 
-def plot_dataset(output_dir, dataset_dir, dataset_number):
+def plot_dataset_allversions(output_dir, dataset_dir, dataset_number):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
+    print anova_oneway.anova_f_oneway(result_list)
     plot_one(name_list, result_list, dataset_number, output_dir)
+
+
+def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list):
+    version_list = [version[:10]+"-"+dataset_number for version in version_list]
+    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
+    samples_list=[]
+    i = 0
+    for name in name_list:
+        if name in version_list:
+            samples_list.append(result_list[i])
+        i += 1
+    print anova_oneway.anova_f_oneway(samples_list)
+    plot_one(version_list, samples_list, dataset_number, output_dir)
+
 
 
 def plot(name_list, result_list, f_oneway, output_dir):
