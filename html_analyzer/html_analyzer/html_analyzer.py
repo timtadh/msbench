@@ -22,9 +22,9 @@ def main():
         "-l", "--loops", dest="loops", type="string",
         help="define the loops"
     )
-    parser.add_option("-v", "--versions_dir", dest="versions_dir")
+    parser.add_option("-v", "--versions-dir", dest="versions_dir")
     parser.add_option(
-        "-o", "--output_dir", dest="output_dir", type="string", default=tempfile.gettempdir(),
+        "-o", "--output-dir", dest="output_dir", type="string", default=tempfile.gettempdir(),
         help="path to write output"
     )
     parser.add_option(
