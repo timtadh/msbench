@@ -32,17 +32,34 @@ def generate_multiple_samples(loops, versions_dir, output_dir, repetitions, samp
                 generate_samples_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
 
 
+def generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
+    versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
+    # we will use versions instead of versions_list
+    if len(versions) != 0 and len(samples_list) != 0:
+        threads = []
+        print len(versions), " processes are running.... "
+        for version in versions:
+            p = Process(target=generate_samples_run,
+                        args=(versions_dir, version, output_dir, samples_list, samples_dir, loops, repetitions,))
+            threads.append(p)
+    for i in range(0, len(versions)):
+        threads[i].start()
+    for i in range(0, len(versions)):
+        threads[i].join()
+
+
 def generate_multiple_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir):
     versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
     if len(versions_list) != 0 and len(samples_list) != 0:
         threads = []
         print len(versions_list), " processes are running.... "
         for version in versions_list:
-            p = Process(target=generate_samples_run, args=(versions_dir, version, output_dir, samples_list, samples_dir, loops, repetitions,))
+            p = Process(target=generate_samples_run,
+                        args=(versions_dir, version, output_dir, samples_list, samples_dir, loops, repetitions,))
             threads.append(p)
-    for i in range(0, len(get_allfiles(versions_dir))):
+    for i in range(0, len(versions_list)):
         threads[i].start()
-    for i in range(0, len(get_allfiles(versions_dir))):
+    for i in range(0, len(versions_list)):
         threads[i].join()
 
 
