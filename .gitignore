@@ -13,3 +13,4 @@ slow*
 *.test
 test.*
 .idea
+*.py~
