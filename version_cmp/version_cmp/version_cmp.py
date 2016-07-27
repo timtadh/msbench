@@ -61,11 +61,9 @@ def main():
     elif options.plot_dataset:
         # plot particular versions
         if options.t_test:
-            # calculate_t_test()
             plot_dataset_versions(options.output, datasets, str(options.plot_dataset), options.t_test)
         # plot all versions
         else:
-            # calculate_t_test()
             plot_dataset_allversions(output_dir, datasets, str(options.plot_dataset))
     else:
         print >> sys.stderr, "you must supply one of: --stats, --plot-all, --plot-dataset, [-n, -t]"
