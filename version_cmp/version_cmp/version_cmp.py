@@ -2,11 +2,11 @@
 
 import calcu_util
 import plot_figure
-import anova_oneway
+import statistic
 import sys
 import os
 import tempfile
-import anova_oneway
+import statistic
 from optparse import OptionParser
 
 def main():
@@ -81,7 +81,7 @@ def plot_all(output_dir, dataset_dir):
 
 def plot_dataset_allversions(output_dir, dataset_dir, dataset_number):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
-    print anova_oneway.anova_f_oneway(result_list)
+    print "anova f one way:", statistic.anova_f_oneway(result_list)
     plot_one(name_list, result_list, dataset_number, output_dir)
 
 
@@ -94,7 +94,7 @@ def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list)
         if name in version_list:
             samples_list.append(result_list[i])
         i += 1
-    print anova_oneway.anova_f_oneway(samples_list)
+    print "t test:", statistic.t_test(samples_list[0], samples_list[1])
     plot_one(version_list, samples_list, dataset_number, output_dir)
 
 
@@ -109,7 +109,7 @@ def plot_one(name_list, result_list, number, output_dir):
 
 
 def get_f_oneway(result_list):
-    return anova_oneway.anova_f_oneway(result_list)
+    return statistic.anova_f_oneway(result_list)
 
 
 if __name__ == '__main__':
