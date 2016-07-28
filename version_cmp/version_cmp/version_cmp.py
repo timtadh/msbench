@@ -9,7 +9,6 @@ import tempfile
 import anova_oneway
 from optparse import OptionParser
 
-
 def main():
     usage = "%prog -o <output-path> [--plot-all|--plot-dataset=<dataset>|--stats] <datasets>"
     parser = OptionParser(usage)
