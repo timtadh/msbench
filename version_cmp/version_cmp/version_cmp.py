@@ -1,7 +1,5 @@
 # Author: Junqi Ma on 7/18/16
 
-import sys
-
 import calcu_util
 import plot_figure
 import anova_oneway
