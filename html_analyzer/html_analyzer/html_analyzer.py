@@ -7,14 +7,6 @@ import time
 import tempfile
 import os
 
-'''
-command:
-python html_analyzer.py -l 100 -v /home/majunqi/research/msbench/examples/html-ex-versions -r 5 -o /tmp/test/ /home/majunqi/research/cc-sample
-python html_analyzer.py -l 100 -p /home/majunqi/research/msbench/examples/html-ex-versions/... -p /home/majunqi/research/msbench/examples/html-ex-versions/... -r 5 -o /tmp/test/ /home/majunqi/research/cc-sample/xxx.html
-
-'''
-
-
 def main():
     usage = "usage: %prog -l <int> -v <versions_dir>| -p <version_dir> -p <version_dir> -r <repetitions> -o <output_dir> <samples_dir>"
     parser = OptionParser(usage)
