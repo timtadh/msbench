@@ -2,15 +2,15 @@
 
 import calcu_util
 import plot_figure
-import statistic
 import sys
 import os
 import tempfile
 import statistic
 from optparse import OptionParser
 
+
 def main():
-    usage = "%prog -o <output-path> [--plot-all|--plot-dataset=<dataset>|--stats] <datasets>"
+    usage = "%prog -o <output-path> [--plot-all|--plot-dataset=<dataset> -t <versionname> -t <versionname>|--stats] <datasets>"
     parser = OptionParser(usage)
     parser.add_option(
         '-o', "--output", dest="output", type="string", default=tempfile.gettempdir(),
@@ -86,9 +86,9 @@ def plot_dataset_allversions(output_dir, dataset_dir, dataset_number):
 
 
 def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list):
-    version_list = [version[:10]+"-"+dataset_number for version in version_list]
+    version_list = [version[:10] + "-" + dataset_number for version in version_list]
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
-    samples_list=[]
+    samples_list = []
     i = 0
     for name in name_list:
         if name in version_list:
@@ -96,7 +96,6 @@ def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list)
         i += 1
     print "t test:", statistic.t_test(samples_list[0], samples_list[1])
     plot_one(version_list, samples_list, dataset_number, output_dir)
-
 
 
 def plot(name_list, result_list, f_oneway, output_dir):

@@ -10,7 +10,7 @@ import os
 '''
 command:
 python html_analyzer.py -l 100 -v /home/majunqi/research/msbench/examples/html-ex-versions -r 5 -o /tmp/test/ /home/majunqi/research/cc-sample
-python html_analyzer.py -l 100 -p /home/majunqi/research/msbench/examples/html-ex-versions/... -p /home/majunqi/research/msbench/examples/html-ex-versions/... -r 5 -o /tmp/test/ /home/majunqi/research/cc-sample
+python html_analyzer.py -l 100 -p /home/majunqi/research/msbench/examples/html-ex-versions/... -p /home/majunqi/research/msbench/examples/html-ex-versions/... -r 5 -o /tmp/test/ /home/majunqi/research/cc-sample/xxx.html
 
 '''
 
@@ -35,6 +35,10 @@ def main():
         "-p", "--particular", dest="particular", type="string", action="append",
         help="use particular versions "
     )
+    parser.add_option(
+        "-i", "--is-one-dataset", dest="is_one_dataset", action="store_true", default=False,
+        help="determine to test one dataset or not"
+    )
 
     (options, args) = parser.parse_args()
 
@@ -45,10 +49,11 @@ def main():
         sys.exit(1)
 
     samples_dir = os.path.abspath(args[0])
-    if not os.path.exists(samples_dir):
-        print >> sys.stderr, "The directory %s does not exist!" % samples_dir
-        parser.print_help()
-        sys.exit(1)
+    if not samples_dir.__contains__(".html"):
+        if not os.path.exists(samples_dir):
+            print >> sys.stderr, "The directory %s does not exist!" % samples_dir
+            parser.print_help()
+            sys.exit(1)
 
     output_dir = os.path.abspath(options.output_dir)
     if not os.path.exists(output_dir):
@@ -72,12 +77,16 @@ def main():
                     version_dir = ""
                     particular = []
 
-                    for i in range(1,index-1):
+                    for i in range(1, index - 1):
                         version_dir += "/" + pieces[i]
                     for dir in dirs:
                         particular.append(dir.split('/')[index - 1])
 
-                    start_particular(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
+                    if options.is_one_dataset:
+                        start_particular_onesamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
+                    else:
+                        start_particular_allsamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
+
                 else:
                     print >> sys.stderr, "You must provide a argument for the versions_dir or particular version"
                     parser.print_help()
@@ -102,9 +111,15 @@ def start_all(loops, versions_dir, output_dir, repetitions, samples_dir):
     print time.time() - start
 
 
-def start_particular(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
+def start_particular_allsamples(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
     start = time.time()
     subprocess_util.generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions)
+    print time.time() - start
+
+
+def start_particular_onesamples(loops, versions_dir, output_dir, repetitions, sample, versions):
+    start = time.time()
+    subprocess_util.generate_particular_onesample(loops, versions_dir, output_dir, repetitions, sample, versions)
     print time.time() - start
 
 
