@@ -78,7 +78,6 @@ def main():
                         start_particular_onesamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
                     else:
                         start_particular_allsamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
-
                 else:
                     print >> sys.stderr, "You must provide a argument for the versions_dir or particular version"
                     parser.print_help()
