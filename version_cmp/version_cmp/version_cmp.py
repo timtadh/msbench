@@ -58,10 +58,10 @@ def main():
     elif options.plot_dataset:
         # plot particular versions
         if options.t_test:
-            plot_dataset_versions(options.output, datasets, str(options.plot_dataset), options.t_test)
+            plot_dataset_versions(options.output, datasets, options.plot_dataset, options.t_test)
         # plot all versions
         else:
-            plot_dataset_allversions(output_dir, datasets, str(options.plot_dataset))
+            plot_dataset_allversions(output_dir, datasets, options.plot_dataset)
     else:
         print >> sys.stderr, "you must supply one of: --stats, --plot-all, --plot-dataset, [-n, -t]"
         parser.print_help()
@@ -76,18 +76,19 @@ def stats(output_dir, dataset_dir):
 
 def plot_all(output_dir, dataset_dir):
     name_list, result_mean_list, result_std_list, result_mean_dic, result_std_dic = calcu_util.calculate_allfiles_mean_std(dataset_dir)
+    print len(result_mean_list), len(result_mean_list[0])
     plot(name_list, result_mean_list, get_f_oneway(result_mean_list), output_dir)
 
 
-def plot_dataset_allversions(output_dir, dataset_dir, dataset_number):
-    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
+def plot_dataset_allversions(output_dir, dataset_dir, dataset_id):
+    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     print "anova f one way:", statistic.anova_f_oneway(result_list)
-    plot_one(name_list, result_list, dataset_number, output_dir)
+    plot_one(name_list, result_list, dataset_id, output_dir)
 
 
-def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list):
-    version_list = [version[:10] + "-" + dataset_number for version in version_list]
-    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_number)
+def plot_dataset_versions(output_dir, dataset_dir, dataset_id, version_list):
+    version_list = [version[:10] + "-" + dataset_id for version in version_list]
+    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     samples_list = []
     i = 0
     for name in name_list:
@@ -95,15 +96,15 @@ def plot_dataset_versions(output_dir, dataset_dir, dataset_number, version_list)
             samples_list.append(result_list[i])
         i += 1
     print "t test:", statistic.t_test(samples_list[0], samples_list[1])
-    plot_one(version_list, samples_list, dataset_number, output_dir)
+    plot_one(version_list, samples_list, dataset_id, output_dir)
 
 
 def plot(name_list, result_list, f_oneway, output_dir):
     plot_figure.plot_box(name_list, result_list, f_oneway, output_dir)
 
 
-def plot_one(name_list, result_list, number, output_dir):
-    dir = plot_figure.plot_one(name_list, result_list, number, output_dir)
+def plot_one(name_list, result_list, dataset_id, output_dir):
+    dir = plot_figure.plot_one(name_list, result_list, dataset_id, output_dir)
     print "figure was saved in: " + dir
 
 

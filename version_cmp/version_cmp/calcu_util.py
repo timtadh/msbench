@@ -64,13 +64,13 @@ def dynamic_report_bigdifference(dir, population):
         name_list, result_list = get_onesample_allversions(dir, i)
 
 
-def get_onesample_allversions(dir, number):
+def get_onesample_allversions(dir, dataset_id):
     allfiles_name_list = pre_process(dir)
     name_list = []
     result_list = []
     times_list = []
     for name in allfiles_name_list:
-        if name.__contains__(number):
+        if name.__contains__(dataset_id):
             times_list.append(name)
     times_list.sort()
     for time in times_list:

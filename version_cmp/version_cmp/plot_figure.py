@@ -28,12 +28,12 @@ def plot_box(name_list, result_list, f_oneway, output_dir):
     plt.show()
 
 
-def plot_one(name_list, result_list, number, output_dir):
+def plot_one(name_list, result_list, dataset_id, output_dir):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     dic_return = ax.boxplot(x=result_list)
 
-    ax.set_title("sample number: " + number)
+    ax.set_title("sample number: " + dataset_id)
 
     ax.set_xlabel("versions")
     ax.set_ylabel("time: ms")
@@ -42,7 +42,7 @@ def plot_one(name_list, result_list, number, output_dir):
     plt.setp(xtickname, rotation=0)
 
     for i in range(100):
-        dir = output_dir + "/" + number + "-" + str(i) + ".png"
+        dir = output_dir + "/" + dataset_id + "-" + str(i) + ".png"
         if os.path.isfile(dir):
             continue
         else:
