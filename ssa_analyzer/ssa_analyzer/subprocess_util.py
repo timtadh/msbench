@@ -1,5 +1,6 @@
 # Author: Junqi Ma on 8/3/16
 
+
 import shutil
 import os
 import subprocess
@@ -32,6 +33,16 @@ def generate_samples_repetitions(versions_dir, version, output_dir, sample, loop
     write_file(output_dir + version + "-" + sample.partition(".")[0] + "-" + repetitions + ".time", elapsed)
 
 
+def generate_multiple_onedataset(loops, versions_dir, output_dir, repetitions, sample):
+    versions_list = get_allfiles(versions_dir)
+    samples_list = []
+    samples_list.append(sample)
+    for sample in samples_list:
+        for version in versions_list:
+            generate_samples_repetitions(versions_dir, version, output_dir, sample, loops, repetitions)
+
+
+# not useful in this case
 def generate_multiple_onesample_threads(loops, versions_dir, output_dir, repetitions, sample):
     # versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
     versions_list = get_allfiles(versions_dir)

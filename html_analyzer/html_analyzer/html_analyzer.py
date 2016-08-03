@@ -98,18 +98,21 @@ def main():
 
 
 def start_all_html(loops, versions_dir, output_dir, repetitions, samples_dir):
+    print >> sys.stderr, "program is running....."
     start = time.time()
     subprocess_util.generate_multiple_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir)
     print time.time() - start
 
 
 def start_particular_allsamples(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
+    print >> sys.stderr, "program is running....."
     start = time.time()
     subprocess_util.generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions)
     print time.time() - start
 
 
 def start_particular_onesamples(loops, versions_dir, output_dir, repetitions, sample, versions):
+    print >> sys.stderr, "program is running....."
     start = time.time()
     subprocess_util.generate_particular_onesample(loops, versions_dir, output_dir, repetitions, sample, versions)
     print time.time() - start
