@@ -60,7 +60,7 @@ def main():
                     parser.print_help()
                     sys.exit(1)
                 elif options.versions_dir:
-                    start_all(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                    start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
                 elif options.particular:
                     dirs = options.particular
                     pieces = dirs[0].split('/')
@@ -97,7 +97,7 @@ def main():
         sys.exit(1)
 
 
-def start_all(loops, versions_dir, output_dir, repetitions, samples_dir):
+def start_all_html(loops, versions_dir, output_dir, repetitions, samples_dir):
     start = time.time()
     subprocess_util.generate_multiple_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir)
     print time.time() - start

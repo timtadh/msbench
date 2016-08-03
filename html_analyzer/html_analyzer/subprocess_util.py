@@ -39,12 +39,13 @@ def generate_particular_onesample(loops, versions_dir, output_dir, repetitions, 
     for i in range(1, index - 1):
         samples_dir += "/" + pieces[i]
     samples_dir += "/"
-    sample = pieces[index-1]
+    sample = pieces[index - 1]
     print samples_dir, sample
     for version in versions:
         generate_samples_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
 
 
+# some versions running through all datasets
 def generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
     versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
     # we will use versions instead of versions_list
@@ -61,6 +62,7 @@ def generate_particular_samples_threads(loops, versions_dir, output_dir, repetit
         threads[i].join()
 
 
+# all versions running through all datasets
 def generate_multiple_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir):
     versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
     if len(versions_list) != 0 and len(samples_list) != 0:
