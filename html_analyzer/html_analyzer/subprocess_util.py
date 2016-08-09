@@ -40,7 +40,6 @@ def generate_particular_onesample(loops, versions_dir, output_dir, repetitions, 
         samples_dir += "/" + pieces[i]
     samples_dir += "/"
     sample = pieces[index - 1]
-    print samples_dir, sample
     for version in versions:
         generate_sample_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
 
@@ -53,7 +52,6 @@ def generate_all_onesample(loops, versions_dir, output_dir, repetitions, sample)
         samples_dir += "/" + pieces[i]
     samples_dir += "/"
     sample = pieces[index - 1]
-    print samples_dir, sample
     versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
     for version in versions_list:
         generate_sample_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
