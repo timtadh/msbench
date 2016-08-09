@@ -14,4 +14,4 @@ running all datasets through some versions:
 
 running one dataset through some versions:
 
-        usage:python html_analyzer.py -l 100 -p ~/research/examples/html-versions/... -p ~/research/examples/html-versions/... -i -r 30 -o /tmp/test/ ~/research/samples/xxx.html
+        usage:python html_analyzer.py -l 100 -p ~/research/examples/html-versions/... -p ~/research/examples/html-versions/... -d -r 30 -o /tmp/test/ ~/research/samples/xxx.html
