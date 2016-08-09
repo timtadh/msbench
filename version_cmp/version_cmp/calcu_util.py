@@ -140,7 +140,7 @@ def generate_dir(dir):
 
 def write_allfiles(name_list, result_mean_list, result_std_list, output_dir):
     dir = output_dir + "/mean_std.txt"
-    f = open(dir, "a+")
+    f = open(dir, "w+")
     i = 1
     for i in range(len(name_list)):
         f.write(name_list[i] + "\t" + str(result_mean_list[i]) + "\t" + str(result_std_list[i]) + "\r")
