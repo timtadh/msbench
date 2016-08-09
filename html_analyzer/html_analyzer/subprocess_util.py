@@ -45,6 +45,20 @@ def generate_particular_onesample(loops, versions_dir, output_dir, repetitions, 
         generate_samples_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
 
 
+def generate_all_onesample(loops, versions_dir, output_dir, repetitions, sample):
+    pieces = sample.split('/')
+    index = len(pieces)
+    samples_dir = ""
+    for i in range(1, index - 1):
+        samples_dir += "/" + pieces[i]
+    samples_dir += "/"
+    sample = pieces[index - 1]
+    print samples_dir, sample
+    versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
+    for version in versions_list:
+        generate_samples_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
+
+
 # some versions running through all datasets
 def generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions):
     versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)

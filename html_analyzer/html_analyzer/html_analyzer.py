@@ -7,6 +7,7 @@ import time
 import tempfile
 import os
 
+
 def main():
     usage = "usage: %prog -l <int> -v <versions_dir>| -p <version_dir> -p <version_dir> -r <repetitions> -o <output_dir> <samples_dir>"
     parser = OptionParser(usage)
@@ -14,7 +15,9 @@ def main():
         "-l", "--loops", dest="loops", type="string",
         help="define the loops"
     )
-    parser.add_option("-v", "--versions-dir", dest="versions_dir")
+    parser.add_option(
+        "-v", "--versions-dir", dest="versions_dir"
+    )
     parser.add_option(
         "-o", "--output-dir", dest="output_dir", type="string", default=tempfile.gettempdir(),
         help="path to write output"
@@ -28,9 +31,13 @@ def main():
         help="use particular versions "
     )
     parser.add_option(
-        "-i", "--is-one-dataset", dest="is_one_dataset", action="store_true", default=False,
+        "-d", "--is-one-dataset", dest="is_one_dataset", action="store_true", default=False,
         help="determine to test one dataset or not"
     )
+    # parser.add_option(
+    #     "-e", "--is-allversions", dest="is_allversions", action="store_true", default=False,
+    #     help="determine to test one dataset or not"
+    # )
 
     (options, args) = parser.parse_args()
 
@@ -60,7 +67,10 @@ def main():
                     parser.print_help()
                     sys.exit(1)
                 elif options.versions_dir:
-                    start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                    if options.is_one_dataset:
+                        start_all_onesamples(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                    else:
+                        start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
                 elif options.particular:
                     dirs = options.particular
                     pieces = dirs[0].split('/')
@@ -107,6 +117,13 @@ def start_particular_allsamples(loops, versions_dir, output_dir, repetitions, sa
     print >> sys.stderr, "program is running....."
     start = time.time()
     subprocess_util.generate_particular_samples_threads(loops, versions_dir, output_dir, repetitions, samples_dir, versions)
+    print time.time() - start
+
+
+def start_all_onesamples(loops, versions_dir, output_dir, repetitions, samples):
+    print >> sys.stderr, "program is running....."
+    start = time.time()
+    subprocess_util.generate_all_onesample(loops, versions_dir, output_dir, repetitions, samples)
     print time.time() - start
 
 
