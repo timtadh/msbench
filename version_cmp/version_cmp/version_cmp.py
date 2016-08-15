@@ -32,6 +32,10 @@ def main():
         '-t', "--t-test", dest="t_test", type="string", action="append",
         help="name the versions to tun the t-test"
     )
+    parser.add_option(
+        '-r', "--auto-report", dest="report", action="store_true", default=False,
+        help="report automatically if there is a pair of versions whose p-value is smaller 5% in t-test"
+    )
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
@@ -60,6 +64,8 @@ def main():
         if options.t_test:
             plot_dataset_versions(options.output, datasets, options.plot_dataset, options.t_test)
         # plot all versions
+        elif options.report:
+            report_auto(options.output, datasets, options.plot_dataset)
         else:
             plot_dataset_allversions(output_dir, datasets, options.plot_dataset)
     else:
@@ -82,9 +88,24 @@ def plot_all(output_dir, dataset_dir):
 
 def plot_dataset_allversions(output_dir, dataset_dir, dataset_id):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
+    print name_list
     print "anova f one way:", statistic.anova_f_oneway(result_list)
     plot_one(name_list, result_list, dataset_id, output_dir)
 
+
+def report_auto(output_dir, dataset_dir, dataset_id):
+    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
+    num = len(name_list)
+    abnormal = []
+    for i in range(num - 1):
+        for j in range(i+1, num-1):
+            result = statistic.t_test(result_list[i], result_list[j])
+            if result[1] < 0.05:
+                content = name_list[i] + name_list[j] + str(result[1])
+                abnormal.append(content)
+                print content
+    if os.path.isfile(output_dir):
+        calcu_util.write_file(output_dir, abnormal)
 
 def plot_dataset_versions(output_dir, dataset_dir, dataset_id, version_list):
     version_list = [version[:10] + "-" + dataset_id for version in version_list]

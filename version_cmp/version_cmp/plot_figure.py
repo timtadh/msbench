@@ -36,7 +36,7 @@ def plot_one(name_list, result_list, dataset_id, output_dir):
     ax.set_title("sample number: " + dataset_id)
 
     ax.set_xlabel("versions")
-    ax.set_ylabel("time: ms")
+    ax.set_ylabel("time: s")
 
     xtickname = plt.setp(ax, xticklabels=name_list)
     plt.setp(xtickname, rotation=0)
