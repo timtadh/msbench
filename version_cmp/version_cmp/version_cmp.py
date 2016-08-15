@@ -98,7 +98,7 @@ def report_auto(output_dir, dataset_dir, dataset_id):
     num = len(name_list)
     abnormal = []
     for i in range(num - 1):
-        for j in range(i+1, num-1):
+        for j in range(i + 1, num - 1):
             result = statistic.t_test(result_list[i], result_list[j])
             if result[1] < 0.05:
                 content = name_list[i] + name_list[j] + str(result[1])
@@ -106,6 +106,7 @@ def report_auto(output_dir, dataset_dir, dataset_id):
                 print content
     if os.path.isfile(output_dir):
         calcu_util.write_file(output_dir, abnormal)
+
 
 def plot_dataset_versions(output_dir, dataset_dir, dataset_id, version_list):
     version_list = [version[:10] + "-" + dataset_id for version in version_list]

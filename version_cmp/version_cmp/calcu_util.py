@@ -70,7 +70,7 @@ def get_onesample_allversions(dir, dataset_id):
     result_list = []
     times_list = []
     for name in allfiles_name_list:
-        if name.__contains__('-'+dataset_id+'-'):
+        if name.__contains__('-' + dataset_id + '-'):
             times_list.append(name)
     times_list.sort()
     for time in times_list:
