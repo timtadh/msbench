@@ -119,6 +119,7 @@ def plot_dataset_allversions_random(output_dir, dataset_dir, dataset_id):
 def report_auto(output_dir, dataset_dir, dataset_id):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     num = len(name_list)
+    print "\n", "number of versions:", num
     abnormal = []
     for i in range(num):
         for j in range(i + 1, num):
