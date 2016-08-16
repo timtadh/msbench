@@ -9,9 +9,13 @@ plot all results:
 
         usage:python version_cmp.py -o /tmp/asdf -a  /tmp/sample200/
 
-plot all versions on one datasets results:
+plot all versions on one datasets results unsorted:
 
         usage:python version_cmp.py -o /tmp/asdf -d 200 /tmp/sample200/
+        
+plot all versions on one datasets results sorted:
+
+        usage:python version_cmp.py -o /tmp/asdf -d 200 --order ~/data_order /tmp/sample200/
 
 plot some versions on one dataset:
 

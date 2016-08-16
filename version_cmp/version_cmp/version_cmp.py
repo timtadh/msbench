@@ -36,6 +36,10 @@ def main():
         '-r', "--auto-report", dest="report", action="store_true", default=False,
         help="report automatically if there is a pair of versions whose p-value is smaller 5% in t-test"
     )
+    parser.add_option(
+        "--order", dest="order", type="string",
+        help="gives the order of the input for plotting"
+    )
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
@@ -49,6 +53,13 @@ def main():
         print >> sys.stderr, "The directory %s does not exist!" % datasets
         parser.print_help()
         sys.exit(1)
+
+    if options.order:
+        order_path = os.path.abspath(options.order)
+        if not os.path.exists(order_path):
+            print >> sys.stderr, "The directory %s does not exist!" % datasets
+            parser.print_help()
+            sys.exit(1)
 
     output_dir = options.output
     if not os.path.exists(output_dir):
@@ -67,7 +78,11 @@ def main():
         elif options.report:
             report_auto(options.output, datasets, options.plot_dataset)
         else:
-            plot_dataset_allversions(output_dir, datasets, options.plot_dataset)
+            if output_dir:
+                if options.order:
+                    plot_dataset_allversions(output_dir, datasets, options.plot_dataset, order_path)
+                else:
+                    plot_dataset_allversions_random(output_dir, datasets, options.plot_dataset)
     else:
         print >> sys.stderr, "you must supply one of: --stats, --plot-all, --plot-dataset, [-n, -t]"
         parser.print_help()
@@ -86,19 +101,53 @@ def plot_all(output_dir, dataset_dir):
     plot(name_list, result_mean_list, get_f_oneway(result_mean_list), output_dir)
 
 
-def plot_dataset_allversions(output_dir, dataset_dir, dataset_id):
+def plot_dataset_allversions(output_dir, dataset_dir, dataset_id, order_path):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
-    print name_list
+    new_name_list, new_result_list = sort(name_list, result_list, order_path)
     print "anova f one way:", statistic.anova_f_oneway(result_list)
+    print "new one", len(new_name_list), len(new_result_list)
+    plot_one(new_name_list, new_result_list, dataset_id, output_dir)
+
+
+def plot_dataset_allversions_random(output_dir, dataset_dir, dataset_id):
+    name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
+    print "anova f one way:", statistic.anova_f_oneway(result_list)
+    print "old one", len(name_list), len(result_list)
     plot_one(name_list, result_list, dataset_id, output_dir)
+
+
+def sort(name_list, result_list, order_path):
+    help_list_sorted = []
+    new_name_list = []
+    new_result_list = []
+    with open(order_path) as f:
+        name_list_ordered = [x.strip('\n') for x in f.readlines()]
+
+    for i in range(len(name_list)):
+        for j in range(len(name_list_ordered)):
+            if name_list_ordered[j].__contains__(name_list[i].split("-")[0]):
+                help_list_sorted.append(j)
+    help_list_unsorted = list(help_list_sorted)
+    help_list_sorted.sort()
+    for i in help_list_sorted:
+        for j in range(len(help_list_unsorted)):
+            if help_list_unsorted[j] == i:
+                new_name_list.append(name_list[j])
+                new_result_list.append(result_list[j])
+                break
+    print len(help_list_sorted), len(help_list_unsorted)
+    return new_name_list, new_result_list
+
+
+# def switch(name_list, return_list):
 
 
 def report_auto(output_dir, dataset_dir, dataset_id):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     num = len(name_list)
     abnormal = []
-    for i in range(num - 1):
-        for j in range(i + 1, num - 1):
+    for i in range(num):
+        for j in range(i + 1, num):
             result = statistic.t_test(result_list[i], result_list[j])
             if result[1] < 0.05:
                 content = name_list[i] + name_list[j] + str(result[1])
