@@ -70,7 +70,7 @@ def get_onesample_allversions(dir, dataset_id):
     result_list = []
     times_list = []
     for name in allfiles_name_list:
-        if name.__contains__('-' + dataset_id+'-'):
+        if name.__contains__('-' + dataset_id + '-'):
             times_list.append(name)
     times_list.sort()
     for time in times_list:
@@ -82,6 +82,29 @@ def get_onesample_allversions(dir, dataset_id):
             name_list.append(name)
             result_list.append(format_number_list(convert_string_number(a)))
     return name_list, result_list
+
+
+def sort_by_orderfile(name_list, result_list, order_path):
+    help_list_sorted = []
+    new_name_list = []
+    new_result_list = []
+    with open(order_path) as f:
+        name_list_ordered = [x.strip('\n') for x in f.readlines()]
+
+    for i in range(len(name_list)):
+        for j in range(len(name_list_ordered)):
+            if name_list_ordered[j].__contains__(name_list[i].split("-")[0]):
+                help_list_sorted.append(j)
+    help_list_unsorted = list(help_list_sorted)
+    help_list_sorted.sort()
+    for i in help_list_sorted:
+        for j in range(len(help_list_unsorted)):
+            if help_list_unsorted[j] == i:
+                new_name_list.append(name_list[j])
+                new_result_list.append(result_list[j])
+                break
+    print len(help_list_sorted), len(help_list_unsorted)
+    return new_name_list, new_result_list
 
 
 def calculate_mean(a):

@@ -80,7 +80,7 @@ def main():
         else:
             if output_dir:
                 if options.order:
-                    plot_dataset_allversions(output_dir, datasets, options.plot_dataset, order_path)
+                    plot_dataset_allversions_ordered(output_dir, datasets, options.plot_dataset, order_path)
                 else:
                     plot_dataset_allversions_random(output_dir, datasets, options.plot_dataset)
     else:
@@ -101,9 +101,9 @@ def plot_all(output_dir, dataset_dir):
     plot(name_list, result_mean_list, get_f_oneway(result_mean_list), output_dir)
 
 
-def plot_dataset_allversions(output_dir, dataset_dir, dataset_id, order_path):
+def plot_dataset_allversions_ordered(output_dir, dataset_dir, dataset_id, order_path):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
-    new_name_list, new_result_list = sort(name_list, result_list, order_path)
+    new_name_list, new_result_list = calcu_util.sort_by_orderfile(name_list, result_list, order_path)
     print "anova f one way:", statistic.anova_f_oneway(result_list)
     print "new one", len(new_name_list), len(new_result_list)
     plot_one(new_name_list, new_result_list, dataset_id, output_dir)
@@ -116,32 +116,6 @@ def plot_dataset_allversions_random(output_dir, dataset_dir, dataset_id):
     plot_one(name_list, result_list, dataset_id, output_dir)
 
 
-def sort(name_list, result_list, order_path):
-    help_list_sorted = []
-    new_name_list = []
-    new_result_list = []
-    with open(order_path) as f:
-        name_list_ordered = [x.strip('\n') for x in f.readlines()]
-
-    for i in range(len(name_list)):
-        for j in range(len(name_list_ordered)):
-            if name_list_ordered[j].__contains__(name_list[i].split("-")[0]):
-                help_list_sorted.append(j)
-    help_list_unsorted = list(help_list_sorted)
-    help_list_sorted.sort()
-    for i in help_list_sorted:
-        for j in range(len(help_list_unsorted)):
-            if help_list_unsorted[j] == i:
-                new_name_list.append(name_list[j])
-                new_result_list.append(result_list[j])
-                break
-    print len(help_list_sorted), len(help_list_unsorted)
-    return new_name_list, new_result_list
-
-
-# def switch(name_list, return_list):
-
-
 def report_auto(output_dir, dataset_dir, dataset_id):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     num = len(name_list)
@@ -150,18 +124,22 @@ def report_auto(output_dir, dataset_dir, dataset_id):
         for j in range(i + 1, num):
             result = statistic.t_test(result_list[i], result_list[j])
             if result[1] < 0.05:
-                content = name_list[i] + name_list[j] + str(result[1])
+                content = name_list[i].split("-")[0] + "-" + name_list[j].split("-")[0] + "-" + str(result[1])
                 abnormal.append(content)
                 print content
-    if os.path.isfile(output_dir):
-        calcu_util.write_file(output_dir, abnormal)
+    output_dir = output_dir + "samples" + dataset_id + "-t-test-p-value.txt"
+    f = open(output_dir, "w")
+    for item in abnormal:
+        f.write("%s\n" % item)
 
 
 def plot_dataset_versions(output_dir, dataset_dir, dataset_id, version_list):
     version_list = [version[:10] + "-" + dataset_id for version in version_list]
+    print version_list
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     samples_list = []
     i = 0
+    print name_list
     for name in name_list:
         if name in version_list:
             samples_list.append(result_list[i])
