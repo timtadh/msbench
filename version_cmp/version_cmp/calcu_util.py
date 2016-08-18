@@ -59,11 +59,6 @@ def calculate_allfiles_mean_std(dir):
     return name_list, result_mean_list, result_std_list, result_mean_dic, result_std_dic
 
 
-def dynamic_report_bigdifference(dir, population):
-    for i in range(population):
-        name_list, result_list = get_onesample_allversions(dir, i)
-
-
 def get_onesample_allversions(dir, dataset_id):
     allfiles_name_list = pre_process(dir)
     name_list = []
@@ -103,7 +98,6 @@ def sort_by_orderfile(name_list, result_list, order_path):
                 new_name_list.append(name_list[j])
                 new_result_list.append(result_list[j])
                 break
-    print len(help_list_sorted), len(help_list_unsorted)
     return new_name_list, new_result_list
 
 

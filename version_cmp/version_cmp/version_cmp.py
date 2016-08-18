@@ -104,15 +104,15 @@ def plot_all(output_dir, dataset_dir):
 def plot_dataset_allversions_ordered(output_dir, dataset_dir, dataset_id, order_path):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
     new_name_list, new_result_list = calcu_util.sort_by_orderfile(name_list, result_list, order_path)
+    print "number of versions:", len(new_name_list)
     print "anova f one way:", statistic.anova_f_oneway(result_list)
-    print "new one", len(new_name_list), len(new_result_list)
     plot_one(new_name_list, new_result_list, dataset_id, output_dir)
 
 
 def plot_dataset_allversions_random(output_dir, dataset_dir, dataset_id):
     name_list, result_list = calcu_util.get_onesample_allversions(dataset_dir, dataset_id)
+    print "number of versions:", len(name_list)
     print "anova f one way:", statistic.anova_f_oneway(result_list)
-    print "old one", len(name_list), len(result_list)
     plot_one(name_list, result_list, dataset_id, output_dir)
 
 
