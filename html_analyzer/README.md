@@ -4,6 +4,10 @@ running all datasets through all versions:
 
         usage:python html_analyzer.py -l 100 -v ~/research/examples/html-versions -r 5 -o /tmp/test/ ~/research/samples
 
+running all datasets through all versions randomly:
+
+        usage:python html_analyzer.py -l 100 -v ~/research/examples/html-versions -r 5 --random -o /tmp/test/ ~/research/samples
+
 running one dataset through all versions
 
 		usage:python html_analyzer.py -l 100 -v ~/research/examples/html-versions -d -r 5 -o /tmp/test/ ~/research/samples
