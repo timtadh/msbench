@@ -19,6 +19,10 @@ def main():
         "-v", "--versions-dir", dest="versions_dir"
     )
     parser.add_option(
+        "--random", dest="is_random", action="store_true", default=False,
+        help="make versions running through dataset randomly"
+    )
+    parser.add_option(
         "-o", "--output-dir", dest="output_dir", type="string", default=tempfile.gettempdir(),
         help="path to write output"
     )
@@ -70,7 +74,10 @@ def main():
                     if options.is_one_dataset:
                         start_all_onesamples(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
                     else:
-                        start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                        if options.is_random:
+                            start_all_html_random(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                        else:
+                            start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
                 elif options.particular:
                     dirs = options.particular
                     pieces = dirs[0].split('/')
@@ -110,6 +117,13 @@ def start_all_html(loops, versions_dir, output_dir, repetitions, samples_dir):
     print >> sys.stderr, "program is running....."
     start = time.time()
     subprocess_util.generate_multiple_samples(loops, versions_dir, output_dir, repetitions, samples_dir)
+    print time.time() - start
+
+
+def start_all_html_random(loops, versions_dir, output_dir, repetitions, samples_dir):
+    print >> sys.stderr, "program is running....."
+    start = time.time()
+    subprocess_util.generate_multiple_samples_random(loops, versions_dir, output_dir, repetitions, samples_dir)
     print time.time() - start
 
 

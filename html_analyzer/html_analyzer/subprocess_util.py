@@ -4,6 +4,7 @@ import shutil
 import os
 import subprocess
 import time
+import random
 from multiprocessing import Process
 
 
@@ -21,7 +22,15 @@ def generate_sample_repetitions(versions_dir, version, output_dir, sample, sampl
             elapsed = str((time.time()) - start)
         else:
             elapsed = elapsed + "-" + str((time.time()) - start)
-    write_file(output_dir + version + "-" + sample.partition(".")[0] + "-" + repetitions + ".time", elapsed)
+    write_file(output_dir + "/" + version + "-" + sample.partition(".")[0] + "-" + repetitions + ".time", elapsed)
+
+
+def generate_sample_random(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions):
+    elapsed = ""
+    start = time.time()
+    generate_sample(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
+    elapsed = str((time.time()) - start) + "-"
+    write_file_random(output_dir + version + "-" + sample.partition(".")[0] + "-" + repetitions + ".time", elapsed)
 
 
 def generate_multiple_samples(loops, versions_dir, output_dir, repetitions, samples_dir):
@@ -111,6 +120,18 @@ def generate_multiple_samples(loops, versions_dir, output_dir, repetitions, samp
                 generate_sample_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
 
 
+def generate_multiple_samples_random(loops, versions_dir, output_dir, repetitions, samples_dir):
+    versions_list, samples_list = pre_process(output_dir, versions_dir, samples_dir)
+    new_versions_list = []
+    for version in versions_list:
+        for i in range(int(repetitions)):
+            new_versions_list.append(version)
+    random.shuffle(new_versions_list)
+    for sample in samples_list:
+        for version in new_versions_list:
+            generate_sample_random(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
+
+
 def generate_samples_run(versions_dir, version, output_dir, samples_list, samples_dir, loops, repetitions):
     for sample in samples_list:
         generate_sample_repetitions(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions)
@@ -139,5 +160,12 @@ def generate_dir(dir):
 def write_file(dir, content):
     if content != "":
         f = open(dir, "w+")
+        f.write(content)
+        f.close()
+
+
+def write_file_random(dir, content):
+    if content != "":
+        f = open(dir, "a+")
         f.write(content)
         f.close()
