@@ -179,7 +179,11 @@ def read_file(dir=""):
         content = str(f.read())
         if content.count("-") > 1:
             times = content.split("-")
-            return times
+            new_times = []
+            for time in times:
+                if len(time) > 1:
+                    new_times.append(time)
+            return new_times
         else:
             content_list = []
             content_list.append(content)
