@@ -62,6 +62,7 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     print >> sys.stderr, "directory %s" % output_dir, "has been created"
+    output_dir = output_dir + "/"
 
     if options.loops:
         if options.output_dir:
@@ -72,12 +73,12 @@ def main():
                     sys.exit(1)
                 elif options.versions_dir:
                     if options.is_one_dataset:
-                        start_all_onesamples(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                        start_all_onesamples(options.loops, options.versions_dir, output_dir, options.repetitions, args[0])
                     else:
                         if options.is_random:
-                            start_all_html_random(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                            start_all_html_random(options.loops, options.versions_dir, output_dir, options.repetitions, args[0])
                         else:
-                            start_all_html(options.loops, options.versions_dir, options.output_dir, options.repetitions, args[0])
+                            start_all_html(options.loops, options.versions_dir, output_dir, options.repetitions, args[0])
                 elif options.particular:
                     dirs = options.particular
                     pieces = dirs[0].split('/')
@@ -92,9 +93,9 @@ def main():
                         particular.append(dir.split('/')[index - 1])
 
                     if options.is_one_dataset:
-                        start_particular_onesamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
+                        start_particular_onesamples(options.loops, version_dir, output_dir, options.repetitions, args[0], particular)
                     else:
-                        start_particular_allsamples(options.loops, version_dir, options.output_dir, options.repetitions, args[0], particular)
+                        start_particular_allsamples(options.loops, version_dir, output_dir, options.repetitions, args[0], particular)
                 else:
                     print >> sys.stderr, "You must provide a argument for the versions_dir or particular version"
                     parser.print_help()
