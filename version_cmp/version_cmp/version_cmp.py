@@ -141,10 +141,11 @@ def plot_dataset_versions(output_dir, dataset_dir, dataset_id, version_list):
     samples_list = []
     i = 0
     print name_list
-    for name in name_list:
-        if name in version_list:
-            samples_list.append(result_list[i])
-        i += 1
+    for i in range(len(version_list)):
+        for j in range(len(name_list)):
+            if name_list[j] == version_list[i]:
+                samples_list.append(result_list[j])
+
     print "t test:", statistic.t_test(samples_list[0], samples_list[1])
     plot_one(version_list, samples_list, dataset_id, output_dir)
 

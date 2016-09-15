@@ -7,7 +7,8 @@ import time
 import random
 from multiprocessing import Process
 
-
+# TODO
+# make different pprof for each program.
 def generate_sample(versions_dir, version, output_dir, sample, samples_dir, loops, repetitions):
     subprocess.call([versions_dir + "/" + version, "-p", output_dir + version + "-" + sample.partition(".")[0] + "-" + repetitions + ".pprof", "-l", loops, samples_dir + "/" + sample],
                     shell=False)
