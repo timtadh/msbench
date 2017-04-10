@@ -27,8 +27,8 @@ def commandline():
     dest_dir_processed = workspace_dir + "processed_data_largesize/"
     dest_dir_processed_flat = workspace_dir + "processed_data_largesize_flat/"
 
-    # matrix_generator.extract_dir_setup(programs_dir, pprofs_dir, dest_dir_profdata)
-    # matrix_generator.files_divider(profdata_pfm_all, profdata_pfm_classified)
+    matrix_generator.extract_dir_setup(programs_dir, pprofs_dir, dest_dir_profdata)
+    matrix_generator.files_divider(profdata_pfm_all, profdata_pfm_classified)
     matrix_generator.load_all_files(folders_dir, dest_dir_processed, True)
     matrix_generator.load_all_files(folders_dir, dest_dir_processed_flat, False)
 
