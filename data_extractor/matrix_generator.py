@@ -11,12 +11,11 @@ import copy
 # load_all_files(): read in all profile data
 # build_matrix_setup(): using data to build matrix for cluster
 
-def extract(program_dir, pprof_dir=""):
+def extract(program_dir, pprof_dir="", dest_dir=""):
     pieces = pprof_dir.split('/')
     # file name is in the last index and get rid of '.pprof'
     filename = pieces[len(pieces) - 1].partition(".")[0]
 
-    dest_dir = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize/"
     if not os.path.isdir(dest_dir):
         os.mkdir(dest_dir)
 
@@ -25,28 +24,26 @@ def extract(program_dir, pprof_dir=""):
     subprocess.call(["go", "tool", "pprof", "-text", "-output", dest_dir + filename + ".txt", "-nodecount=1000000", "-nodefraction=0", program_dir, pprof_dir], shell=False)
 
 
-def extract_dir_setup():
-    # program_dir = "/home/majunqi/research/msbench/examples/html-ex-exp-pfm-versions/html-ex-567e3e3050d01c08ea02bf4865faaa6fb42bf64f"
-    # pprof_dir = "/home/majunqi/research/result/result_pfm/html-ex-567e3e3050d01c08ea02bf4865faaa6fb42bf64f-61-100.pprof"
-    programs_dir = "/home/majunqi/research/msbench/examples/html-ex-exp-pfm-versions/"
-    pprofs_dir = "/home/majunqi/research/result/test_automation/result_pfm_largesize/"
+def extract_dir_setup(programs_dir, pprofs_dir, dest_dir):
 
     programs_list = os.listdir(programs_dir)
     for program in programs_list:
         # glob means get all the file using regular expression '*'
+
+        # -30.pprof means getting the 30th data, however we should get the average flat% from 50 repetitions
         pprof_dir_list = glob.glob(pprofs_dir + program + "*-30.pprof")
         pprof_dir_list.sort()
         for pprof_dir in pprof_dir_list:
-            extract(programs_dir + program, pprof_dir)
+            extract(programs_dir + program, pprof_dir, dest_dir)
 
 
-def load_all_files():
-    folders_dir = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize_classified/"
+def load_all_files(folders_dir, dest_dir, is_percentage):
+
     for folder in os.listdir(folders_dir):
-        build_matrix_setup(folders_dir+folder+"/")
+        build_matrix_setup(folders_dir+folder+"/", dest_dir, is_percentage)
         # print folders_dir+folder+"/"
 
-def build_matrix_setup(texts_dir):
+def build_matrix_setup(texts_dir, dest_dir, is_percentage):
     # texts_dir = "/home/majunqi/research/result/profdata_pfm/"
     # texts_dir = "/home/majunqi/research/result/testtest/"
     text_list = os.listdir(texts_dir)
@@ -105,9 +102,17 @@ def build_matrix_setup(texts_dir):
                         index = 1
                     count += 1
                 pieces = line.split()
-                # flat%
-                flat_percentage = pieces[1]
-                flat_percentage = flat_percentage[0: len(flat_percentage) - 1]
+                if is_percentage:
+                    # flat%
+                    flat_percentage = pieces[1]
+                    flat_percentage = flat_percentage[0: len(flat_percentage) - 1]
+                    flat_data = flat_percentage
+                elif not is_percentage:
+                    # flat
+                    flat = pieces[1]
+                    flat = flat[0: len(flat) - 1]
+                    flat_data = flat
+
                 # method name
                 name = pieces[5]
 
@@ -122,7 +127,7 @@ def build_matrix_setup(texts_dir):
 
                 # value is a map
                 value = value_of_htmlname[index_value].get(html_name)
-                value.append(flat_percentage)
+                value.append(flat_data)
                 # value_of_htmlname.updata({html_name: value})
         f.close()
                 # data.update({name: value_of_htmlname})
@@ -158,11 +163,8 @@ def build_matrix_setup(texts_dir):
         #             value.append('0')
         #             data.update({key: value})
         #     index += 1
-
-
     # print data
 
-    dest_dir = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     if not os.path.isdir(dest_dir):
         os.mkdir(dest_dir)
 
@@ -193,9 +195,8 @@ def find_index_htmlname(value_of_htmlname, html_name):
     return -1
 
 
-def files_divider():
-    profdata_pfm_all = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize/"
-    profdata_pfm_classified = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize_classified/"
+def files_divider(profdata_pfm_all, profdata_pfm_classified):
+
     if not os.path.isdir(profdata_pfm_classified):
         os.mkdir(profdata_pfm_classified)
 
