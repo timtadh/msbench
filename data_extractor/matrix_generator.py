@@ -110,7 +110,10 @@ def build_matrix_setup(texts_dir, dest_dir, is_percentage):
                 elif not is_percentage:
                     # flat
                     flat = pieces[1]
-                    flat = flat[0: len(flat) - 1]
+                    if flat.__contains__('ms'):
+                        flat = flat[0: len(flat) - 2]
+                    else:
+                        flat = flat[0: len(flat) - 1]
                     flat_data = flat
 
                 # method name
