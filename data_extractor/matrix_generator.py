@@ -7,11 +7,11 @@ import copy
 
 
 # extract_dir_setup(): it generates profile messages using programs and .pprof file and stored in txt
-# files_divider(): it can classify html into folders based on versions' name
-# load_all_files(): read in all profile data
+# files_divider(): it can classify htmls into folders based on versions' name
+# load_all_files(): read in all profiling data
 # build_matrix_setup(): using data to build matrix for cluster
 
-def extract(program_dir, pprof_dir="", dest_dir=""):
+def profile(program_dir, pprof_dir="", dest_dir=""):
     pieces = pprof_dir.split('/')
     # file name is in the last index and get rid of '.pprof'
     filename = pieces[len(pieces) - 1].partition(".")[0]
@@ -24,7 +24,7 @@ def extract(program_dir, pprof_dir="", dest_dir=""):
     subprocess.call(["go", "tool", "pprof", "-text", "-output", dest_dir + filename + ".txt", "-nodecount=1000000", "-nodefraction=0", program_dir, pprof_dir], shell=False)
 
 
-def extract_dir_setup(programs_dir, pprofs_dir, dest_dir):
+def profile_dir_setup(programs_dir, pprofs_dir, dest_dir):
     programs_list = os.listdir(programs_dir)
     for program in programs_list:
         # glob means get all the file using regular expression '*'
@@ -33,7 +33,7 @@ def extract_dir_setup(programs_dir, pprofs_dir, dest_dir):
         pprof_dir_list = glob.glob(pprofs_dir + program + "*-30.pprof")
         pprof_dir_list.sort()
         for pprof_dir in pprof_dir_list:
-            extract(programs_dir + program, pprof_dir, dest_dir)
+            profile(programs_dir + program, pprof_dir, dest_dir)
 
 
 def load_all_files(folders_dir, dest_dir, is_percentage):
@@ -43,8 +43,6 @@ def load_all_files(folders_dir, dest_dir, is_percentage):
 
 
 def build_matrix_setup(texts_dir, dest_dir, is_percentage):
-    # texts_dir = "/home/majunqi/research/result/profdata_pfm/"
-    # texts_dir = "/home/majunqi/research/result/testtest/"
     text_list = os.listdir(texts_dir)
 
     data = dict()
@@ -135,22 +133,6 @@ def build_matrix_setup(texts_dir, dest_dir, is_percentage):
                 value.append(flat_data)
                 # value_of_htmlname.updata({html_name: value})
         f.close()
-        # data.update({name: value_of_htmlname})
-
-        # print flat_percentage + " " +name
-        # if count == 5:
-        #     for key in data.keys():
-        #         value_of_htmlname = data.get(key)
-        #         for key_html in value_of_htmlname:
-        #             # index_value = find_index_htmlname(value_of_htmlname, key_html)
-        #             # value = value_of_htmlname[index_value].get(html_name)
-        #             value = key_html.get(key_html.keys()[0])
-        #             if len(value) == 0:
-        #                 value.append('0')
-        #             elif len(value) != 0:
-        #                 print value
-        # value_of_htmlname.updata({key_html: value})
-        # data.update({key: value_of_htmlname})
 
     # append 0 to the method which is not used in this version
     for key in data.keys():
@@ -161,13 +143,6 @@ def build_matrix_setup(texts_dir, dest_dir, is_percentage):
             value = key_html.get(key_html.keys()[0])
             if len(value) == 0:
                 value.append('0')
-                # if count == 5:
-                #     for key in data.keys():
-                #         if len(data.get(key)) < index:
-                #             value = data.get(key)
-                #             value.append('0')
-                #             data.update({key: value})
-                #     index += 1
     # print data
 
     if not os.path.isdir(dest_dir):
@@ -200,7 +175,7 @@ def find_index_htmlname(value_of_htmlname, html_name):
     return -1
 
 
-def files_divider(profdata_pfm_all, profdata_pfm_classified):
+def classify_files(profdata_pfm_all, profdata_pfm_classified):
     if not os.path.isdir(profdata_pfm_classified):
         os.mkdir(profdata_pfm_classified)
 
@@ -217,3 +192,7 @@ def files_divider(profdata_pfm_all, profdata_pfm_classified):
             os.mkdir(profdata_pfm_classified + key)
         for file_name in names.get(key):
             os.rename(profdata_pfm_all + file_name, profdata_pfm_classified + key + "/" + file_name)
+
+    files = os.listdir(profdata_pfm_all)
+    if len(files) == 0:
+        os.rmdir(profdata_pfm_all)
