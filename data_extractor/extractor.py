@@ -11,7 +11,7 @@ def commandline():
     programs_dir = "/home/majunqi/research/msbench/examples/html-ex-exp-pfm-versions/"
     pprofs_dir = "/home/majunqi/research/result/html1500_automation/html_large1500_new/"
 
-    workspace_dir = "/home/majunqi/research/result/test_automation_test_123d/"
+    workspace_dir = "/home/majunqi/research/result/test_automation_right_flat/"
     if not os.path.isdir(workspace_dir):
         os.mkdir(workspace_dir)
 

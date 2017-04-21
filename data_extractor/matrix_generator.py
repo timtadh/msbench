@@ -106,7 +106,7 @@ def build_matrix_setup(texts_dir, dest_dir, is_percentage):
                     flat_data = flat_percentage
                 elif not is_percentage:
                     # flat
-                    flat = pieces[1]
+                    flat = pieces[0]
                     if flat.__contains__('ms'):
                         flat = flat[0: len(flat) - 2]
                         flat = long(flat)
@@ -193,6 +193,6 @@ def classify_files(profdata_pfm_all, profdata_pfm_classified):
         for file_name in names.get(key):
             os.rename(profdata_pfm_all + file_name, profdata_pfm_classified + key + "/" + file_name)
 
-    files = os.listdir(profdata_pfm_all)
-    if len(files) == 0:
-        os.rmdir(profdata_pfm_all)
+    # files = os.listdir(profdata_pfm_all)
+    # if len(files) == 0:
+    #     os.rmdir(profdata_pfm_all)
