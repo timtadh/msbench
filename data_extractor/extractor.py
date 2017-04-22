@@ -18,18 +18,18 @@ def commandline():
     if not os.path.isdir(workspace_dir):
         os.mkdir(workspace_dir)
 
-    dest_dir_profdata_tmp = workspace_dir + "profiling_data/"
-    dest_dir_profdata = workspace_dir + "profiling_data/"
+    dest_dir_profdata_tmp = workspace_dir + "profdata_pfm_largesize/"
+    dest_dir_profdata = workspace_dir + "profdata_pfm_largesize/"
 
     # profdata_pfm_all = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize/"
     profdata_pfm_all = dest_dir_profdata
-    profdata_pfm_classified = workspace_dir + "profiling_data_classified/"
+    profdata_pfm_classified = workspace_dir + "profdata_pfm_largesize_classified/"
 
     # folders_dir = "/home/majunqi/research/result/test_automation/profdata_pfm_largesize_classified/"
     folders_dir = profdata_pfm_classified
 
-    dest_dir_processed = workspace_dir + "processed_data/"
-    dest_dir_processed_flat = workspace_dir + "processed_data/"
+    dest_dir_processed = workspace_dir + "processed_data_largesize/"
+    dest_dir_processed_flat = workspace_dir + "processed_data_largesize_flat/"
 
     num_of_repetition = 50
 

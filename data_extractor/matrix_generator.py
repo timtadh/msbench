@@ -462,9 +462,10 @@ def find_index_htmlname(value_of_htmlname, html_name):
 # it's used to classify files based on htmls
 def classify_files_byhtmls(profdata_pfm_classified):
     version_folders = os.listdir(profdata_pfm_classified)
-    names = dict()
+
 
     for version_folder in version_folders:
+        names = dict()
         if not os.path.isdir(profdata_pfm_classified + version_folder + "/"):
             continue
         files = os.listdir(profdata_pfm_classified + version_folder + "/")
@@ -482,9 +483,9 @@ def classify_files_byhtmls(profdata_pfm_classified):
             for file_name in names.get(key):
                 os.rename(profdata_pfm_classified + version_folder + "/" + file_name, profdata_pfm_classified + version_folder + "/" + key + "/" + file_name)
 
-                # files = os.listdir(profdata_pfm_all)
-                # if len(files) == 0:
-                #     os.rmdir(profdata_pfm_all)
+    # files = os.listdir(profdata_pfm_all)
+    # if len(files) == 0:
+    #     os.rmdir(profdata_pfm_all)
 
 
 # it's used to classify files based on versions
