@@ -54,6 +54,21 @@ def profile_dir_setup(programs_dir, pprofs_dir, dest_dir):
             profile(programs_dir + program, pprof_dir, dest_dir)
     return num_of_html, num_of_repetition
 
+
+def avg_prof_data(programs_dir, num_of_html, num_of_repetition, pprofs_dir_tmp, dest_dir):
+    programs_list = os.listdir(programs_dir)
+    pprof_list = os.listdir(pprofs_dir_tmp)
+    for program in programs_list:
+        for html in range(num_of_html + 1):
+            total_time = -1
+            flat = -1
+            flat_percentage = -1
+            cum = -1
+            cum_percentage = -1
+            for repetition in range(1, num_of_repetition + 1):
+                filename = program + "-" + html + "-" + num_of_repetition + "-" + repetition + ".txt"
+
+
 def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
@@ -66,6 +81,8 @@ def load_all_files(folders_dir, dest_dir, is_percentage, num_of_repetition):
         # build_matrix_setup(folders_dir + folder + "/", dest_dir, is_percentage)
 
         # the line below is used for test
+        if folder.__contains__('.DS'):
+            continue
         build_matrix_setup_modified(folders_dir + folder + "/", dest_dir, is_percentage, num_of_repetition)
         # print folders_dir+folder+"/"
 
@@ -93,7 +110,8 @@ def merge_pprof_txt(htmls_dir, html_folder_list, num_of_repetitions):
     html_folder_list.sort()
 
     for html_folder in html_folder_list:
-
+        if html_folder.__contains__('.DS'):
+            continue
         html_idx = html_folder
         html_folder = htmls_dir + html_folder
 
@@ -463,7 +481,6 @@ def find_index_htmlname(value_of_htmlname, html_name):
 def classify_files_byhtmls(profdata_pfm_classified):
     version_folders = os.listdir(profdata_pfm_classified)
 
-
     for version_folder in version_folders:
         names = dict()
         if not os.path.isdir(profdata_pfm_classified + version_folder + "/"):
@@ -471,6 +488,8 @@ def classify_files_byhtmls(profdata_pfm_classified):
         files = os.listdir(profdata_pfm_classified + version_folder + "/")
         for file in files:
             if os.path.isdir(profdata_pfm_classified + version_folder + "/" + file + "/"):
+                continue
+            if file.__contains__('.DS'):
                 continue
             html = file.split('-')[3]
             if not html in names.keys():
@@ -481,11 +500,12 @@ def classify_files_byhtmls(profdata_pfm_classified):
             if not os.path.isdir(profdata_pfm_classified + version_folder + "/" + key):
                 os.mkdir(profdata_pfm_classified + version_folder + "/" + key)
             for file_name in names.get(key):
+                # print profdata_pfm_classified + version_folder + "/" + file_name
                 os.rename(profdata_pfm_classified + version_folder + "/" + file_name, profdata_pfm_classified + version_folder + "/" + key + "/" + file_name)
 
-    # files = os.listdir(profdata_pfm_all)
-    # if len(files) == 0:
-    #     os.rmdir(profdata_pfm_all)
+                # files = os.listdir(profdata_pfm_all)
+                # if len(files) == 0:
+                #     os.rmdir(profdata_pfm_all)
 
 
 # it's used to classify files based on versions
@@ -505,7 +525,7 @@ def classify_files_byversions(profdata_pfm_all, profdata_pfm_classified):
         if not os.path.isdir(profdata_pfm_classified + key):
             os.mkdir(profdata_pfm_classified + key)
         for file_name in names.get(key):
-            os.rename(profdata_pfm_all + file_name, profdata_pfm_classified + key + "/" + file_name)
+            shutil.copy(profdata_pfm_all + file_name, profdata_pfm_classified + key + "/" + file_name)
 
             # files = os.listdir(profdata_pfm_all)
             # if len(files) == 0:
