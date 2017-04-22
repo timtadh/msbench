@@ -185,11 +185,6 @@ def merge_pprof_txt(htmls_dir, html_folder_list, num_of_repetitions):
                 count += 1
             f.close()
 
-        # because there are 50 files, so the dividend is 50
-        repetition = num_of_repetitions
-
-        total_time = my_total_time / repetition
-
         txt_name = txt_list[0].split('-')
         txt_name = txt_name[0] + '-' + txt_name[1] + '-' + txt_name[2] + '-' + html_idx + '-' + str(repetition) + '.txt';
 
@@ -204,14 +199,22 @@ def merge_pprof_txt(htmls_dir, html_folder_list, num_of_repetitions):
             continue
 
         f = open(filepath, 'w')
+
+        # because there are 50 files, so the dividend is 50
+        repetition = num_of_repetitions
+
+        total_time = my_total_time / repetition
+        total_time = "{0:.4f}".format(total_time)
         f.write(str(total_time) + '\n')
 
         count = 1
         for method_name in method_name_list:
             flat = data_flat.get(method_name) / repetition
+            flat = "{0:.4f}".format(flat)
             f.write(str(flat) + '\t')
             # data_flat.update({method_name: flat})
             flat_percentage = data_flat_percentage.get(method_name) / repetition
+            flat_percentage = "{0:.4f}".format(flat_percentage)
             f.write(str(flat_percentage) + '\t')
             # data_flat_percentage.update({method_name: flat_percentage})
             f.write(method_name + '\n')
