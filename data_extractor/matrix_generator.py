@@ -211,11 +211,11 @@ def merge_pprof_txt(htmls_dir, html_folder_list, num_of_repetitions):
         for method_name in method_name_list:
             flat = data_flat.get(method_name) / repetition
             flat = "{0:.4f}".format(flat)
-            f.write(str(flat) + '\t')
+            f.write(str(flat) + ' ')
             # data_flat.update({method_name: flat})
             flat_percentage = data_flat_percentage.get(method_name) / repetition
             flat_percentage = "{0:.4f}".format(flat_percentage)
-            f.write(str(flat_percentage) + '\t')
+            f.write(str(flat_percentage) + ' ')
             # data_flat_percentage.update({method_name: flat_percentage})
             f.write(method_name + '\n')
             count += 1
