@@ -54,21 +54,6 @@ def profile_dir_setup(programs_dir, pprofs_dir, dest_dir):
             profile(programs_dir + program, pprof_dir, dest_dir)
     return num_of_html, num_of_repetition
 
-
-def avg_prof_data(programs_dir, num_of_html, num_of_repetition, pprofs_dir_tmp, dest_dir):
-    programs_list = os.listdir(programs_dir)
-    pprof_list = os.listdir(pprofs_dir_tmp)
-    for program in programs_list:
-        for html in range(num_of_html + 1):
-            total_time = -1
-            flat = -1
-            flat_percentage = -1
-            cum = -1
-            cum_percentage = -1
-            for repetition in range(1, num_of_repetition + 1):
-                filename = program + "-" + html + "-" + num_of_repetition + "-" + repetition + ".txt"
-
-
 def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
