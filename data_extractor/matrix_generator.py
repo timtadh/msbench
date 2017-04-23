@@ -7,7 +7,7 @@ import copy
 import re
 from sets import Set
 import shutil
-
+from decimal import Decimal
 
 # extract_dir_setup(): it generates profile messages using programs and .pprof file and stored in txt
 # files_divider(): it can classify htmls into folders based on versions' name
@@ -204,17 +204,19 @@ def merge_pprof_txt(htmls_dir, html_folder_list, num_of_repetitions):
         repetition = num_of_repetitions
 
         total_time = my_total_time / repetition
-        total_time = "{0:.4f}".format(total_time)
+        total_time = Decimal(total_time).quantize(Decimal('0.0000'))
         f.write(str(total_time) + '\n')
 
         count = 1
         for method_name in method_name_list:
             flat = data_flat.get(method_name) / repetition
-            flat = "{0:.4f}".format(flat)
+            flat = Decimal(flat).quantize('0.0000')
+            # flat = "{0:.4f}".format(flat)
             f.write(str(flat) + ' ')
             # data_flat.update({method_name: flat})
             flat_percentage = data_flat_percentage.get(method_name) / repetition
-            flat_percentage = "{0:.4f}".format(flat_percentage)
+            flat_percentage = Decimal(flat_percentage).quantize('0.000')
+            # flat_percentage = "{0:.4f}".format(flat_percentage)
             f.write(str(flat_percentage) + ' ')
             # data_flat_percentage.update({method_name: flat_percentage})
             f.write(method_name + '\n')
